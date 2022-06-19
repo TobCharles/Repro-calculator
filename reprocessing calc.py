@@ -145,7 +145,7 @@ yield_round = round(float(repo_yield),1)
 unrig_round = round(float(repo_unrig),1)
 
 if rig_type in ('9','0'):
-    print("Your mining yield is roughly:",unrig_round,"%","\nNOTE: structure is unrigged")
+    print("Your reprocessing yield is roughly:",unrig_round,"%","\nNOTE: structure is unrigged")
 else:
-    print("Your mining yield is roughly:",yield_round,"%")
+    print("Your reprocessing yield is roughly:",yield_round,"%")
 
