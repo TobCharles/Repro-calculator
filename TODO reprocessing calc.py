@@ -1,6 +1,7 @@
 
 print("=============== REPROCESSING CALCULATOR ===============\n")
 
+# this is supposed to work, but get_sec_type() always gets skipped regardless of rig_mod's values, why?
 def get_rig_type() -> int:
     global rig_type, rig_mod
 
