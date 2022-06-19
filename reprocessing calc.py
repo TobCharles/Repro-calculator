@@ -70,11 +70,11 @@ print("""Step 4: Select reprocessing skill level:
 0. No Reprocessing skill
 """)
 
-rep_skill = input("please select your reprocessing skill:")
+rep_skill = int(input("please select your reprocessing skill:"))
 while rep_skill not in range(0,6):
-    rep_skill = input("Invalid, please pick options 1-5 or 0:")
+    rep_skill = int(input("Invalid, please pick options 1-5 or 0:"))
 else:
-    d = int(rep_skill)
+    d = rep_skill
 
 print("Selected option:",rep_skill)
 time.sleep(1)
@@ -88,11 +88,11 @@ print("""Step 5: Select reprocessing efficiency skill level:
 0. No Reprocessing Efficiency skill
 """)
 
-eff_skill = input("please select your reprocessing efficiency skill:")
+eff_skill = int(input("please select your reprocessing efficiency skill:"))
 while eff_skill not in range(0,6):
-    eff_skill = input("Invalid, please pick options 1-5 or 0:")
+    eff_skill = int(input("Invalid, please pick options 1-5 or 0:"))
 else:
-    e = int(eff_skill)
+    e = eff_skill
 
 print("Selected option:",eff_skill)
 time.sleep(1)
@@ -106,11 +106,11 @@ print("""Step 6: Select specific ore skill level:
 0. No <Ore> Reprocessing skill
 """)
 
-ore_skill = input("please select your specific ore skill:")
+ore_skill = int(input("please select your specific ore skill:"))
 while ore_skill not in range(0,6):
-    ore_skill = input("Invalid, please pick options 1-5 or 0:")
+    ore_skill = int(input("Invalid, please pick options 1-5 or 0:"))
 else:
-    f = int(ore_skill)
+    f = ore_skill
 
 print("Selected option:",ore_skill)
 time.sleep(1)
