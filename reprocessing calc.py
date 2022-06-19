@@ -21,7 +21,6 @@ def get_rig_type() -> int:
         rig_mod = 0
     
     return (rig_mod)
-rig = get_rig_type()
 
 def get_sec_type(rig_mod: int) -> float:
 
@@ -46,7 +45,6 @@ def get_sec_type(rig_mod: int) -> float:
             sec_mod = 0
         
     return (sec_mod)
-sec = get_sec_type(rig)
 
 def get_strc_type() -> float:
 
@@ -68,7 +66,6 @@ def get_strc_type() -> float:
         strc_mod = 0.0
 
     return strc_mod
-strct = get_strc_type()
 
 def get_rep_skill() -> int:
 
@@ -89,7 +86,6 @@ def get_rep_skill() -> int:
         rep_mod = rep_skill
 
     return (rep_mod)
-rep = get_rep_skill()
 
 def get_eff_skill() -> int:
 
@@ -110,7 +106,6 @@ def get_eff_skill() -> int:
         eff_mod = eff_skill
 
     return (eff_mod)
-eff = get_eff_skill()
 
 def get_ore_skill() -> int:
 
@@ -131,7 +126,6 @@ def get_ore_skill() -> int:
         ore_mod = ore_skill
 
     return (ore_mod)
-ore = get_ore_skill()
 
 def get_imp_type() -> float:
 
@@ -156,6 +150,13 @@ def get_imp_type() -> float:
         imp_mod = 0.0
 
     return (imp_mod)
+
+rig = get_rig_type()
+sec = get_sec_type(rig)
+strct = get_strc_type()
+rep = get_rep_skill()
+eff = get_eff_skill()
+ore = get_ore_skill()
 impl = get_imp_type()
 
 print(
