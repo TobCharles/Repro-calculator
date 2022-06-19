@@ -2,8 +2,9 @@
 TODO: File DocString. Fill this in with a description of what this file is/does.
 
 """
-
-import time
+# CHANGES:
+# No need to use time.sleep -> No need for time
+# AVOID single letter variables.
 
 
 def command_line_calculator():
@@ -11,13 +12,13 @@ def command_line_calculator():
     while rig_type not in ["1", "2", "9", "0"]:
         rig_type = input("Invalid, please pick options 1,2,9 or 0:")
     if rig_type == "1":
-        a = int(1)
+        # a 1 or 2 without anything else around them is assumed to be an integer
+        rig_mod = 1
     elif rig_type == "2":
-        a = int(3)
+        rig_mod = 3
     else:
-        a = int(0)
+        rig_mod = 0
     print("Selected option:", rig_type)
-    time.sleep(1)
 
     print(
         """Step 2: Select security modifier:\n
@@ -27,21 +28,21 @@ def command_line_calculator():
     """
     )
     if rig_type in ("9", "0"):
-        b = int(0)
+        sec_mod = 0
         print("\nNOTICE: Structure is unrigged, skipping security modifier...\n")
-        time.sleep(1)
+
     else:
         sec_type = input("please select a security type:")
         while sec_type not in ["1", "2", "3"]:
             sec_type = input("Invalid, please pick options 1-3:")
         if sec_type == "2":
-            b = float(0.06)
+            # Anything with a decimal place is assumed to be a floating-point number
+            sec_mod = 0.06
         elif sec_type == "3":
-            b = float(0.12)
+            sec_mod = 0.12
         else:
-            b = int(0)
+            sec_mod = 0
         print("Selected option:", sec_type)
-        time.sleep(1)
 
     print(
         """Step 3: Select structure type:\n
@@ -55,14 +56,13 @@ def command_line_calculator():
     while strc_type not in ["1", "2", "9"]:
         strc_type = input("Invalid, please pick options 1-2 or 9:")
     if strc_type == "1":
-        c = float(0.02)
+        strc_mod = 0.02
     elif strc_type == "2":
-        c = float(0.055)
+        strc_mod = 0.055
     else:
-        c = int(0)
+        strc_mod = 0
 
     print("Selected option:", strc_type)
-    time.sleep(1)
 
     print(
         """Step 4: Select reprocessing skill level:
@@ -79,10 +79,9 @@ def command_line_calculator():
     while rep_skill not in range(0, 6):
         rep_skill = int(input("Invalid, please pick options 1-5 or 0:"))
     else:
-        d = rep_skill
+        repr_mod = rep_skill
 
     print("Selected option:", rep_skill)
-    time.sleep(1)
 
     print(
         """Step 5: Select reprocessing efficiency skill level:
@@ -98,11 +97,8 @@ def command_line_calculator():
     eff_skill = int(input("please select your reprocessing efficiency skill:"))
     while eff_skill not in range(0, 6):
         eff_skill = int(input("Invalid, please pick options 1-5 or 0:"))
-    else:
-        e = eff_skill
 
     print("Selected option:", eff_skill)
-    time.sleep(1)
 
     print(
         """Step 6: Select specific ore skill level:
@@ -119,10 +115,9 @@ def command_line_calculator():
     while ore_skill not in range(0, 6):
         ore_skill = int(input("Invalid, please pick options 1-5 or 0:"))
     else:
-        f = ore_skill
+        ore_skill = ore_skill
 
     print("Selected option:", ore_skill)
-    time.sleep(1)
 
     print(
         """Step 7: Select Implants:
@@ -136,54 +131,53 @@ def command_line_calculator():
     while implants not in ["1", "2", "3", "0"]:
         implants = input("Invalid, please pick options 1-3 or 0:")
     if implants == "1":
-        g = float(0.01)
+        implant_mod = 0.01
     elif implants == "2":
-        g = float(0.02)
+        implant_mod = 0.02
     elif implants == "3":
-        g = float(0.04)
+        implant_mod = 0.04
     else:
-        g = int(0)
+        implant_mod = 0
 
     print("Selected option:", implants)
-    time.sleep(1)
 
     print(
         "You have selected options:\nRig Option:",
-        a,
+        rig_mod,
         "\n" "Security Option:",
-        b,
+        sec_mod,
         "\n" "Structure Option:",
-        c,
+        strc_mod,
         "\n" "Reprocessing Skill:",
-        d,
+        repr_mod,
         "\n" "Efficiency Skill:",
-        e,
+        eff_skill,
         "\n" "Specific Skill:",
-        f,
+        ore_skill,
         "\n" "Implant Option:",
-        g,
+        implant_mod,
         "\n" ".....Calculating.....",
     )
-    time.sleep(1)
 
+    # These will automatically be floats, as they are calculated using floats
     repo_yield = (
-        ((50 + a) * (1 + b))
-        * (1 + c)
-        * (1 + (0.03 * d))
-        * (1 + (0.03 * e))
-        * (1 + (0.02 * f))
-        * (1 + g)
+        ((50 + rig_mod) * (1 + sec_mod))
+        * (1 + strc_mod)
+        * (1 + (0.03 * repr_mod))
+        * (1 + (0.03 * eff_skill))
+        * (1 + (0.02 * ore_skill))
+        * (1 + implant_mod)
     )
     repo_unrig = (
-        (50 + a)
-        * (1 + c)
-        * (1 + (0.03 * d))
-        * (1 + (0.03 * e))
-        * (1 + (0.02 * f))
-        * (1 + g)
+        (50 + rig_mod)
+        * (1 + strc_mod)
+        * (1 + (0.03 * repr_mod))
+        * (1 + (0.03 * eff_skill))
+        * (1 + (0.02 * ore_skill))
+        * (1 + implant_mod)
     )
-    yield_round = round(float(repo_yield), 1)
-    unrig_round = round(float(repo_unrig), 1)
+    yield_round = round(repo_yield, 1)
+    unrig_round = round(repo_unrig, 1)
 
     if rig_type in ("9", "0"):
         print(
