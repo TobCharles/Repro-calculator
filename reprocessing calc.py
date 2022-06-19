@@ -71,7 +71,7 @@ print("""Step 4: Select reprocessing skill level:
 """)
 
 rep_skill = input("please select your reprocessing skill:")
-while rep_skill not in ('1','2','3','4','5','0'):
+while rep_skill not in range(0,6):
     rep_skill = input("Invalid, please pick options 1-5 or 0:")
 else:
     d = int(rep_skill)
@@ -89,7 +89,7 @@ print("""Step 5: Select reprocessing efficiency skill level:
 """)
 
 eff_skill = input("please select your reprocessing efficiency skill:")
-while eff_skill not in ('1','2','3','4','5','0'):
+while eff_skill not in range(0,6):
     eff_skill = input("Invalid, please pick options 1-5 or 0:")
 else:
     e = int(eff_skill)
@@ -107,7 +107,7 @@ print("""Step 6: Select specific ore skill level:
 """)
 
 ore_skill = input("please select your specific ore skill:")
-while ore_skill not in ('1','2','3','4','5','0'):
+while ore_skill not in range(0,6):
     ore_skill = input("Invalid, please pick options 1-5 or 0:")
 else:
     f = int(ore_skill)
@@ -122,7 +122,7 @@ print("""Step 7: Select Implants:
 0. No Implants""")
 
 implants = input("please select implants:")
-while implants not in ('1','2','3','0'):
+while implants not in ['1','2','3','0']:
     implants = input("Invalid, please pick options 1-3 or 0:")
 if implants == "1":
     g = float(0.01)
