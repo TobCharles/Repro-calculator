@@ -1,50 +1,62 @@
-print("=============== REPROCESSING CALCULATOR ===============\n")
+if __name__ == "__main__":
+    print("=============== REPROCESSING CALCULATOR ===============\n")
 
 def get_rig_type() -> int:
-
+    
     print("""Step 1: Select Rig type:\n
     1. Tech I Structure rig
     2. Tech II Structure rig
-    9. Unsure (calculation assumes un-rigged)
+    9. Unsure (calculation assumes unrigged)
     0. No Structure rig
     """)
-
-    rig_type = int(input("Rig type:"))
-    while rig_type not in [1,2,9,0]:
-        print("Invalid, please pick options 1,2,9 or 0:")
-        rig_type = int(input("Rig type:"))
-    if rig_type == 1:
-        rig_mod = 1
-    elif rig_type == 2:
-        rig_mod = 3
-    else:
-        rig_mod = 0
+    while True:
+        try:
+            rig_type = int(input("Rig type:"))
+        except ValueError:
+            print("Invalid, input must be integer:")
+            continue
+        while rig_type not in [1,2,9,0]:
+            print("Invalid, please pick options 1,2,9 or 0:")
+            rig_type = int(input("Rig type:"))
+        if rig_type == 1:
+            rig_mod = 1
+        elif rig_type == 2:
+            rig_mod = 3
+        else:
+            rig_mod = 0
     
-    return (rig_mod)
+        return (rig_mod)
 
 def get_sec_type(rig_mod: int) -> float:
 
     if rig_mod == 0:
-        sec_mod = 0
+        sec_mod = 0.0
         print("\nStructure is unrigged, skipping security modifier...")
+
+        return (sec_mod)
     else:
         print("""Step 2: Select Security Modifier:\n
             1. High-Security
             2. Low-Security
             3. Null-Security/W-Space
             """)
-        sec_type = int(input("Security Modifier:"))
-        while sec_type not in range(0,4):
-            print("Invalid, please pick options 1-3:")
-            sec_type = int(input("Security value:"))
-        if sec_type == 2:
-            sec_mod = 0.06
-        elif sec_type == 3:
-            sec_mod = 0.12
-        else:
-            sec_mod = 0
+        while True:
+            try:
+                sec_type = int(input("Security Modifier:"))
+            except ValueError:
+                print("Invalid, input must be integer:")
+                continue
+            while sec_type not in range(0,4):
+                print("Invalid, please pick options 1-3:")
+                sec_type = int(input("Security value:"))
+            if sec_type == 2:
+                sec_mod = 0.06
+            elif sec_type == 3:
+                sec_mod = 0.12
+            else:
+                sec_mod = 0.0
         
-    return (sec_mod)
+            return (sec_mod)
 
 def get_strc_type() -> float:
 
@@ -53,19 +65,23 @@ def get_strc_type() -> float:
     2. Tatara structure
     9. Other structure types
     """)
+    while True:
+        try:
+            strc_type = int(input("Structure type:"))
+        except ValueError:
+            print("Invalid, input must be integer:")
+            continue
+        while strc_type not in [1,2,9]:
+            print("Invalid, please pick options 1,2 or 9:")
+            strc_type = int(input("Structure type:"))
+        if strc_type == 1:
+            strc_mod = 0.02
+        elif strc_type == 2:
+            strc_mod = 0.055
+        else:
+            strc_mod = 0.0
 
-    strc_type = int(input("Structure type:"))
-    while strc_type not in [1,2,9]:
-        print("Invalid, please pick options 1,2 or 9:")
-        strc_type = int(input("Structure type:"))
-    if strc_type == 1:
-        strc_mod = 0.02
-    elif strc_type == 2:
-        strc_mod = 0.055
-    else:
-        strc_mod = 0.0
-
-    return strc_mod
+        return (strc_mod)
 
 def get_rep_skill() -> int:
 
@@ -77,15 +93,19 @@ def get_rep_skill() -> int:
     5. Reprocessing V
     0. No Reprocessing skill
     """)
+    while True:
+        try:
+            rep_skill = int(input("Reprocessing Skill:"))
+        except ValueError:
+            print("Invalid, input must be integer:")
+            continue
+        while rep_skill not in range(0,6):
+            print("Invalid, please pick options 1-5 or 0:")
+            rep_skill = int(input("Reprocessing Skill:"))
+        else:
+            rep_mod = rep_skill
 
-    rep_skill = int(input("Reprocessing Skill:"))
-    while rep_skill not in range(0,6):
-        print("Invalid, please pick options 1-5 or 0:")
-        rep_skill = int(input("Reprocessing Skill:"))
-    else:
-        rep_mod = rep_skill
-
-    return (rep_mod)
+        return (rep_mod)
 
 def get_eff_skill() -> int:
 
@@ -97,15 +117,19 @@ def get_eff_skill() -> int:
     5. Reprocessing Efficiency V
     0. No Reprocessing Efficiency skill
     """)
+    while True:
+        try:
+            eff_skill = int(input("Reprocessing Skill:"))
+        except ValueError:
+            print("Invalid, input must be integer:")
+            continue
+        while eff_skill not in range(0,6):
+            print("Invalid, please pick options 1-5 or 0:")
+            eff_skill = int(input("Reprocessing Skill:"))
+        else:
+            eff_mod = eff_skill
 
-    eff_skill = int(input("Reprocessing Skill:"))
-    while eff_skill not in range(0,6):
-        print("Invalid, please pick options 1-5 or 0:")
-        eff_skill = int(input("Reprocessing Skill:"))
-    else:
-        eff_mod = eff_skill
-
-    return (eff_mod)
+        return (eff_mod)
 
 def get_ore_skill() -> int:
 
@@ -117,15 +141,19 @@ def get_ore_skill() -> int:
     5. <Ore> Reprocessing V
     0. No <Ore> Reprocessing skill
     """)
+    while True:
+        try:
+            ore_skill = int(input("Specific Ore Skill:"))
+        except ValueError:
+            print("Invalid, input must be integer:")
+            continue
+        while ore_skill not in range(0,6):
+            print("Invalid, please pick options 1-5 or 0:")
+            ore_skill = int(input("Specific Ore Skill:"))
+        else:
+            ore_mod = ore_skill
 
-    ore_skill = int(input("Specific Ore Skill:"))
-    while ore_skill not in range(0,6):
-        print("Invalid, please pick options 1-5 or 0:")
-        ore_skill = int(input("Specific Ore Skill:"))
-    else:
-        ore_mod = ore_skill
-
-    return (ore_mod)
+        return (ore_mod)
 
 def get_imp_type() -> float:
 
@@ -135,21 +163,25 @@ def get_imp_type() -> float:
     3. RX-804 Implant
     0. No Implants
     """)
+    while True:
+        try:
+            imp_type = int(input("Implant Type:"))
+        except ValueError:
+            print("Invalid, input must be integer:")
+            continue
+        while imp_type not in range(0,4):
+            print("Invalid, please pick options 1-3 or 0:")
+            imp_type = int(input("Implant Type:"))
+        if imp_type == 1:
+            imp_mod = 0.01
+        elif imp_type == 2:
+            imp_mod = 0.02
+        elif imp_type == 3:
+            imp_mod = 0.04
+        else:
+            imp_mod = 0.0
 
-    imp_type = int(input("Implant Type:"))
-    while imp_type not in range(0,4):
-        print("Invalid, please pick options 1-3 or 0:")
-        imp_type = int(input("Implant Type:"))
-    if imp_type == 1:
-        imp_mod = 0.01
-    elif imp_type == 2:
-        imp_mod = 0.02
-    elif imp_type == 3:
-        imp_mod = 0.04
-    else:
-        imp_mod = 0.0
-
-    return (imp_mod)
+        return (imp_mod)
 
 rig = get_rig_type()
 sec = get_sec_type(rig)
@@ -158,6 +190,31 @@ rep = get_rep_skill()
 eff = get_eff_skill()
 ore = get_ore_skill()
 impl = get_imp_type()
+
+def calc_repro_yield():
+
+    repro_yield = (
+        ((50 + rig) * (1 + sec))
+        * (1 + strct)
+        * (1 + (0.03 * rep))
+        * (1 + (0.03 * eff))
+        * (1 + (0.02 * ore))
+        * (1 + impl)
+    )
+
+    return (repro_yield)
+
+def calc_repro_unrig_yield():
+
+    repro_unrig_yield = (
+        (51 + strct)
+        * (1 + (0.03 * rep))
+        * (1 + (0.03 * eff))
+        * (1 + (0.02 * ore))
+        * (1 + impl)
+    )
+
+    return (repro_unrig_yield)
 
 print(
     "You have selected options:\nRig Type:",
@@ -176,15 +233,11 @@ print(
     impl
 )
 
-def calc_repro_yield():
-    return (
-        ((50 + rig) * (1 + sec))
-        * (1 + strct)
-        * (1 + (0.03 * rep))
-        * (1 + (0.03 * eff))
-        * (1 + (0.02 * ore))
-        * (1 + impl)
-    )
-
-repro_norm = round(calc_repro_yield(),1)
-print("\nYield:",repro_norm,"%")
+if sec == 0.0:
+    norm_unrig_yield = calc_repro_unrig_yield()
+    yield_unrig_round = round(norm_unrig_yield,1)
+    print("\nApproximate Yield:",yield_unrig_round,"%, (Unrigged)")
+else:
+    norm_yield = calc_repro_yield()
+    yield_round = round(norm_yield,1)
+    print("\nApproximate Yield:",yield_round,"%")
