@@ -11,7 +11,7 @@ def get_dock_type() -> bool:
     print(
         """Select dockup option:\n
         1. NPC Station
-        2. Structure
+        2. Player Structure
         """
     )
 
@@ -36,9 +36,10 @@ def get_stds_level() -> float:
     """Function to get standings level."""
 
     print(
-        """Do you have positive standings with station owners?
+        """Do you have positive standings with NPC station?
         1. Yes
         2. No
+        0. Unsure (calculation assumes no)
         """
     )
 
@@ -48,8 +49,8 @@ def get_stds_level() -> float:
         except ValueError:
             print("Invalid, input must be integer.")
             continue
-        while stds_type not in range(1, 3):
-            print("Invalid, please pick options 1 or 2:")
+        while stds_type not in range(0, 3):
+            print("Invalid, please pick options 1, 2 or 0:")
             stds_type = int(input("Option:"))
         if stds_type == 1:
             stds_mod = 1.0
@@ -70,7 +71,7 @@ def get_stef_level() -> int:
         4. 40%
         5. 45%
         6. 50%
-        0. Unsure (0.25 efficiency will be used in calculation"""
+        0. Unsure (calculation assumes efficiency 32%)"""
     )
     while True:
         try:
@@ -81,10 +82,10 @@ def get_stef_level() -> int:
         while stef_type not in range(0, 7):
             print("Invalid, pick options 1-6 or 0:")
             stef_type = int(input("Station efficiency:"))
-        if stef_type == 2:
+        if stef_type == 1:
+            stef_mod = 25
+        elif stef_type == 2:
             stef_mod = 30
-        elif stef_type == 3:
-            stef_mod = 32
         elif stef_type == 4:
             stef_mod = 40
         elif stef_type == 5:
@@ -92,7 +93,7 @@ def get_stef_level() -> int:
         elif stef_type == 6:
             stef_mod = 50
         else:
-            stef_mod = 25
+            stef_mod = 32
 
         return stef_mod
 
@@ -105,8 +106,8 @@ def get_rig_type() -> int:
         """Select structure rig type:\n
     1. Tech I Structure rig
     2. Tech II Structure rig
-    9. Unsure (calculation assumes unrigged)
-    0. No Structure rig
+    9. No Structure rig
+    0. Unsure (calculation assumes unrigged)
     """
     )
     while True:
@@ -128,10 +129,10 @@ def get_rig_type() -> int:
         return rig_mod
 
 
-def get_sec_type(rig_mod: int) -> float:
+def get_sec_type(rig_val: int) -> float:
     """Function to get security modifier."""
 
-    if rig_mod == 0:
+    if rig_val == 0:
         sec_mod = 0.0
         print("\nNOTICE: Structure is unrigged, skipping security modifier...")
 
@@ -139,9 +140,9 @@ def get_sec_type(rig_mod: int) -> float:
     else:
         print(
             """Select system security level:\n
-            1. High-Security
-            2. Low-Security
-            3. Null-Security/W-Space
+            1. High-Security (0.5 - 1.0)
+            2. Low-Security (0.1 - 0.4)
+            3. Null-Security/W-Space (-1.0 - 0.0)
             """
         )
         while True:
@@ -170,7 +171,7 @@ def get_strc_type() -> float:
         """Select structure type:\n
     1. Athanor structure
     2. Tatara structure
-    9. Other structure types
+    9. Other structure types / Unsure
     """
     )
     while True:
@@ -192,8 +193,8 @@ def get_strc_type() -> float:
         return strc_mod
 
 
-def get_rep_skill() -> int:
-    """Function to get reprocessing skill level."""
+def get_rep_and_eff_skill() -> int:
+    """Function to get reprocessing and efficiency skill level."""
 
     print(
         """Select reprocessing skill level:
@@ -217,42 +218,40 @@ def get_rep_skill() -> int:
         else:
             rep_mod = rep_skill
 
-        return rep_mod
+            print(
+                """Select reprocessing efficiency skill level:
+            1. Reprocessing Efficiency I
+            2. Reprocessing Efficiency II
+            3. Reprocessing Efficiency III
+            4. Reprocessing Efficiency IV
+            5. Reprocessing Efficiency V
+            0. No Reprocessing Efficiency skill
+            """
+            )
+            while True:
+                try:
+                    eff_skill = int(input("Efficiency skill:"))
+                except ValueError:
+                    print("Invalid, input must be integer:")
+                    continue
+                while eff_skill not in range(0, 6):
+                    print("Invalid, please pick options 1-5 or 0:")
+                    eff_skill = int(input("Efficiency skill:"))
+                if eff_skill >= 1:
+                    rep_mod = 4
+                    print("Reprocessing IV is prereq of Efficiency, adjusting...\n")
+                    eff_mod = eff_skill
+                else:
+                    eff_mod = eff_skill
 
-
-def get_eff_skill() -> int:
-    """Function to get efficiency skill level."""
-
-    print(
-        """Select reprocessing efficiency skill level:
-    1. Reprocessing Efficiency I
-    2. Reprocessing Efficiency II
-    3. Reprocessing Efficiency III
-    4. Reprocessing Efficiency IV
-    5. Reprocessing Efficiency V
-    0. No Reprocessing Efficiency skill
-    """
-    )
-    while True:
-        try:
-            eff_skill = int(input("Efficiency skill:"))
-        except ValueError:
-            print("Invalid, input must be integer:")
-            continue
-        while eff_skill not in range(0, 6):
-            print("Invalid, please pick options 1-5 or 0:")
-            eff_skill = int(input("Efficiency skill:"))
-        else:
-            eff_mod = eff_skill
-
-        return eff_mod
+                return eff_mod, rep_mod
 
 
 def get_ore_skill() -> int:
     """Function to get specific ore skill level."""
 
     print(
-        """Select specific ore skill level:
+        """Select specific ore skill level:\n(i.e. Simple/Varigated/Coherent Ore Reprocessing etc)
     1. <Ore> Reprocessing I
     2. <Ore> Reprocessing II
     3. <Ore> Reprocessing III
@@ -313,22 +312,23 @@ DOCK = get_dock_type()
 if DOCK == True:
     STDS = get_stds_level()
     STEF = get_stef_level()
-    REPR = get_rep_skill()
-    EFFI = get_eff_skill()
+    EFFI, REPR = get_rep_and_eff_skill()
     ORES = get_ore_skill()
     IMPL = get_impl_type()
     RIGS = 0
     SECU = 0.0
     STCT = 0.0
-    print("Station selecteed, ignoring structure calculation...\n")
+    print("\nStation selecteed, ignoring structure calculation...\n")
 else:
     RIGS = get_rig_type()
     SECU = get_sec_type(RIGS)
     STCT = get_strc_type()
-    REPR = get_rep_skill()
-    EFFI = get_eff_skill()
+    EFFI, REPR = get_rep_and_eff_skill()
     ORES = get_ore_skill()
     IMPL = get_impl_type()
+    STDS = 0.0
+    STEF = 0
+
 
 # calculation formulae
 def calc_repro_yield():
@@ -376,26 +376,48 @@ def calc_stn_repo_yield():
     return stn_yield
 
 
+print(
+    "=== Your Selected Options ===\n",
+    "Dockup option:\n",
+    DOCK,
+    "Standing option:\n",
+    STDS,
+    "Station Efficiency option:\n",
+    STEF,
+    "Rig option:\n",
+    RIGS,
+    "Structure option:\n",
+    STCT,
+    "Efficiency Skill option:\n",
+    EFFI,
+    "Reprocessing Skill option:\n",
+    REPR,
+    "Specific Skill option:\n",
+    ORES,
+    "Implant option:\n",
+    IMPL,
+)
+
 if DOCK == False and SECU == 0.0:
     struct_unrig_yield = calc_repro_unrig_yield()
     struct_unrig_yield_round = round(struct_unrig_yield, 2)
-    print("Approximate yield:", struct_unrig_yield_round, "% (unrigged structure")
+    print("\nApproximate yield:", struct_unrig_yield_round, "% (unrigged structure)")
 elif DOCK == False:
     struct_yield = calc_repro_yield()
     struct_yield_round = round(struct_yield, 2)
-    print("Approximate yield:", struct_yield_round, "% (structure)")
+    print("\nApproximate yield:", struct_yield_round, "% (structure)")
 elif DOCK == True and STDS == 0.95:
     statn_yield = calc_stn_repo_yield()
     statn_yield_round = round(statn_yield, 2)
-    print("Approximate yield:", statn_yield_round, "% (neutral station)")
+    print("\nApproximate yield:", statn_yield_round, "% (neutral station)")
 elif DOCK == True and STEF == 25:
     statn_yield = calc_stn_repo_yield()
     statn_yield_round = round(statn_yield, 2)
-    print("Approximate yield:", statn_yield_round, "% (low-yield station)")
+    print("\nApproximate yield:", statn_yield_round, "% (low-yield station)")
 else:
     statn_yield = calc_stn_repo_yield()
     statn_yield_round = round(statn_yield, 2)
-    print("Approximate yield:", statn_yield_round, "% (station)")
+    print("\nApproximate yield:", statn_yield_round, "% (station)")
 
 
 input()
