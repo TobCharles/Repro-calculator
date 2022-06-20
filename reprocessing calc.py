@@ -1,7 +1,8 @@
 if __name__ == "__main__":
     print("=============== REPROCESSING CALCULATOR ===============\n")
 
-
+# Returns the type of station where reprocessing will happen,
+# and whether user has positive standings with station owners.
 def get_dock_type() -> bool:
     """Function to get type of docking."""
 
@@ -29,7 +30,7 @@ def get_dock_type() -> bool:
         return dock_mod
 
 
-def get_standing_level() -> float:
+def get_stds_level() -> float:
     """Function to get standings level."""
 
     print(
@@ -41,21 +42,22 @@ def get_standing_level() -> float:
 
     while True:
         try:
-            stnd_level = int(input("Option:"))
+            stds_type = int(input("Option:"))
         except ValueError:
             print("Invalid, input must be integer.")
             continue
-        while stnd_level not in range(1, 3):
+        while stds_type not in range(1, 3):
             print("Invalid, please pick options 1 or 2:")
-            stnd_level = int(input("Option:"))
-        if stnd_level == 1:
-            stnd_mod = 1.0
+            stds_type = int(input("Option:"))
+        if stds_type == 1:
+            stds_mod = 1.0
         else:
-            stnd_mod = 0.95
+            stds_mod = 0.95
 
-        return stnd_mod
+        return stds_mod
 
 
+# Returns parameters for structure reprocessing yield.
 def get_rig_type() -> int:
     """Function to get rig type."""
 
@@ -234,7 +236,7 @@ def get_ore_skill() -> int:
         return ore_mod
 
 
-def get_imp_type() -> float:
+def get_impl_type() -> float:
     """Function to get implant type."""
 
     print(
@@ -266,13 +268,14 @@ def get_imp_type() -> float:
         return imp_mod
 
 
-STNT = get_dock_type()
-if STNT == True:
-    STND = get_standing_level()
+# determines whether to calculate station or structure yield.
+DOCK = get_dock_type()
+if DOCK == True:
+    STDS = get_stds_level()
     REPR = get_rep_skill()
     EFFI = get_eff_skill()
     ORES = get_ore_skill()
-    IMPL = get_imp_type()
+    IMPL = get_impl_type()
     RIGS = 0
     SECU = 0.0
     STCT = 0.0
@@ -284,9 +287,9 @@ else:
     REPR = get_rep_skill()
     EFFI = get_eff_skill()
     ORES = get_ore_skill()
-    IMPL = get_imp_type()
+    IMPL = get_impl_type()
 
-
+# calculation formulae
 def calc_repro_yield():
     """Calculates standard yield."""
 
@@ -326,25 +329,26 @@ def calc_stn_repo_yield():
         * (1 + (0.03 * EFFI))
         * (1 + (0.02 * ORES))
         * (1 + IMPL)
-        * STND
+        * STDS
     )
 
     return stn_yield
 
 
-if SECU == 0.0 and STNT == False:
+# prints out yield depending on conditions met.
+if SECU == 0.0 and DOCK == False:
     norm_unrig_yield = calc_repro_unrig_yield()
     yield_unrig_round = round(norm_unrig_yield, 2)
     print("\nApproximate Yield:", yield_unrig_round, "%, (Unrigged)")
-elif STNT == False:
+elif DOCK == False:
     norm_yield = calc_repro_yield()
     yield_round = round(norm_yield, 1)
     print("\nApproximate Yield:", yield_round, "%, (structure)")
-elif STND == 0.95:
+elif STDS == 0.95:
     norm_stn_yield = calc_stn_repo_yield()
-    norm_stn_yield_round = round(norm_stn_yield, 2)
-    print("\nApproximate Yield:", norm_stn_yield_round, "% (station, neutral)")
+    stn_yield_round = round(norm_stn_yield, 2)
+    print("\nApproximate Yield:", stn_yield_round, "% (station, neutral)")
 else:
     norm_stn_yield = calc_stn_repo_yield()
-    norm_stn_yield_round = round(norm_stn_yield, 2)
-    print("\nApproximate Yield:", norm_stn_yield_round, "% (station)")
+    stn_yield_round = round(norm_stn_yield, 2)
+    print("\nApproximate Yield:", stn_yield_round, "% (station)")
