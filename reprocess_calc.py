@@ -1,5 +1,3 @@
-import time
-
 if __name__ == "__main__":
     print("=============== REPROCESSING CALCULATOR ===============\n")
 
@@ -137,34 +135,33 @@ def get_sec_type(rig_val: int) -> float:
     if rig_val == 0:
         sec_mod = 0.0
         print("\nNOTICE: Structure is unrigged, skipping security modifier...")
-        time.sleep(1)
 
         return sec_mod
-    else:
-        print(
-            """Select system security level:\n
-            1. High-Security (0.5 - 1.0)
-            2. Low-Security (0.1 - 0.4)
-            3. Null-Security/W-Space (-1.0 - 0.0)
-            """
-        )
-        while True:
-            try:
-                sec_type = int(input("Security level:"))
-            except ValueError:
-                print("Invalid, input must be integer:")
-                continue
-            while sec_type not in range(0, 4):
-                print("Invalid, please pick options 1-3:")
-                sec_type = int(input("Security level:"))
-            if sec_type == 2:
-                sec_mod = 0.06
-            elif sec_type == 3:
-                sec_mod = 0.12
-            else:
-                sec_mod = 0.0
 
-            return sec_mod
+    print(
+        """Select system security level:\n
+        1. High-Security (0.5 - 1.0)
+        2. Low-Security (0.1 - 0.4)
+        3. Null-Security/W-Space (-1.0 - 0.0)
+        """
+    )
+    while True:
+        try:
+            sec_type = int(input("Security level:"))
+        except ValueError:
+            print("Invalid, input must be integer:")
+            continue
+        while sec_type not in range(0, 4):
+            print("Invalid, please pick options 1-3:")
+            sec_type = int(input("Security level:"))
+        if sec_type == 2:
+            sec_mod = 0.06
+        elif sec_type == 3:
+            sec_mod = 0.12
+        else:
+            sec_mod = 0.0
+
+        return sec_mod
 
 
 def get_strc_type() -> float:
@@ -243,7 +240,6 @@ def get_rep_and_eff_skill() -> int:
                 if eff_skill == 0:
                     rep_mod = 4
                     print("Reprocessing IV is prereq of Efficiency, adjusting...\n")
-                    time.sleep(1)
 
                     eff_mod = eff_skill
                 else:
@@ -320,11 +316,10 @@ if DOCK == True:
     EFFI, REPR = get_rep_and_eff_skill()
     ORES = get_ore_skill()
     IMPL = get_impl_type()
-    RIGS = 0
+    RIGS = int(0)
     SECU = 0.0
     STCT = 0.0
     print("\nStation selecteed, ignoring structure calculation...\n")
-    time.sleep(1)
 else:
     RIGS = get_rig_type()
     SECU = get_sec_type(RIGS)
@@ -333,14 +328,14 @@ else:
     ORES = get_ore_skill()
     IMPL = get_impl_type()
     STDS = 0.0
-    STEF = 0
+    STEF = int(0)
 
 
 # calculation formulae
 def calc_repro_yield():
     """Calculates standard yield."""
 
-    repro_yield = (
+    repro_yield_calc = (
         ((50 + RIGS) * (1 + SECU))
         * (1 + STCT)
         * (1 + (0.03 * REPR))
@@ -349,13 +344,13 @@ def calc_repro_yield():
         * (1 + IMPL)
     )
 
-    return repro_yield
+    return repro_yield_calc
 
 
 def calc_repro_unrig_yield():
     """Calculates unrigged yield."""
 
-    repro_unrig_yield = (
+    repro_unrig_calc = (
         (50 + RIGS)
         * (1 + STCT)
         * (1 + (0.03 * REPR))
@@ -364,13 +359,13 @@ def calc_repro_unrig_yield():
         * (1 + IMPL)
     )
 
-    return repro_unrig_yield
+    return repro_unrig_calc
 
 
 def calc_stn_repo_yield():
     """Calculates station yield."""
 
-    stn_yield = (
+    statn_calc = (
         STEF
         * (1 + (0.03 * REPR))
         * (1 + (0.03 * EFFI))
@@ -379,7 +374,7 @@ def calc_stn_repo_yield():
         * STDS
     )
 
-    return stn_yield
+    return statn_calc
 
 
 print(
@@ -403,7 +398,6 @@ print(
     "\nImplant option:",
     IMPL,
 )
-time.sleep(1)
 
 if DOCK == False and SECU == 0.0:
     struct_unrig_yield = calc_repro_unrig_yield()
