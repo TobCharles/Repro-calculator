@@ -1,3 +1,5 @@
+import time
+
 if __name__ == "__main__":
     print("=============== REPROCESSING CALCULATOR ===============\n")
 
@@ -135,6 +137,7 @@ def get_sec_type(rig_val: int) -> float:
     if rig_val == 0:
         sec_mod = 0.0
         print("\nNOTICE: Structure is unrigged, skipping security modifier...")
+        time.sleep(1)
 
         return sec_mod
     else:
@@ -237,9 +240,11 @@ def get_rep_and_eff_skill() -> int:
                 while eff_skill not in range(0, 6):
                     print("Invalid, please pick options 1-5 or 0:")
                     eff_skill = int(input("Efficiency skill:"))
-                if eff_skill >= 1:
+                if eff_skill == 0:
                     rep_mod = 4
                     print("Reprocessing IV is prereq of Efficiency, adjusting...\n")
+                    time.sleep(1)
+
                     eff_mod = eff_skill
                 else:
                     eff_mod = eff_skill
@@ -319,6 +324,7 @@ if DOCK == True:
     SECU = 0.0
     STCT = 0.0
     print("\nStation selecteed, ignoring structure calculation...\n")
+    time.sleep(1)
 else:
     RIGS = get_rig_type()
     SECU = get_sec_type(RIGS)
@@ -378,25 +384,26 @@ def calc_stn_repo_yield():
 
 print(
     "=== Your Selected Options ===\n",
-    "Dockup option:\n",
+    "Dockup option:",
     DOCK,
-    "Standing option:\n",
+    "\nStanding option:",
     STDS,
-    "Station Efficiency option:\n",
+    "\nStation Efficiency option:",
     STEF,
-    "Rig option:\n",
+    "\nRig option:",
     RIGS,
-    "Structure option:\n",
+    "\nStructure option:",
     STCT,
-    "Efficiency Skill option:\n",
+    "\nEfficiency Skill option:",
     EFFI,
-    "Reprocessing Skill option:\n",
+    "\nReprocessing Skill option:",
     REPR,
-    "Specific Skill option:\n",
+    "\nSpecific Skill option:",
     ORES,
-    "Implant option:\n",
+    "\nImplant option:",
     IMPL,
 )
+time.sleep(1)
 
 if DOCK == False and SECU == 0.0:
     struct_unrig_yield = calc_repro_unrig_yield()
