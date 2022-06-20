@@ -3,6 +3,8 @@ if __name__ == "__main__":
 
 # Returns the type of station where reprocessing will happen,
 # and whether user has positive standings with station owners.
+
+
 def get_dock_type() -> bool:
     """Function to get type of docking."""
 
@@ -57,6 +59,44 @@ def get_stds_level() -> float:
         return stds_mod
 
 
+def get_stef_level() -> int:
+    """Function to get station efficiency."""
+
+    print(
+        """Select NPC station efficiency:\n
+        1. 25%
+        2. 30%
+        3. 32%
+        4. 40%
+        5. 45%
+        6. 50%
+        0. Unsure (0.25 efficiency will be used in calculation"""
+    )
+    while True:
+        try:
+            stef_type = int(input("Station efficiency:"))
+        except ValueError:
+            print("Invalid, input must be integer:")
+            continue
+        while stef_type not in range(0, 7):
+            print("Invalid, pick options 1-6 or 0:")
+            stef_type = int(input("Station efficiency:"))
+        if stef_type == 2:
+            stef_mod = 30
+        elif stef_type == 3:
+            stef_mod = 32
+        elif stef_type == 4:
+            stef_mod = 40
+        elif stef_type == 5:
+            stef_mod = 45
+        elif stef_type == 6:
+            stef_mod = 50
+        else:
+            stef_mod = 25
+
+        return stef_mod
+
+
 # Returns parameters for structure reprocessing yield.
 def get_rig_type() -> int:
     """Function to get rig type."""
@@ -76,7 +116,7 @@ def get_rig_type() -> int:
             print("Invalid, input must be integer:")
             continue
         while rig_type not in [1, 2, 9, 0]:
-            print("Invalid, please pick options 1, 2, 9 or 0:")
+            print("Invalid, pick options 1, 2, 9 or 0:")
             rig_type = int(input("Rig type:"))
         if rig_type == 1:
             rig_mod = 1
@@ -272,6 +312,7 @@ def get_impl_type() -> float:
 DOCK = get_dock_type()
 if DOCK == True:
     STDS = get_stds_level()
+    STEF = get_stef_level()
     REPR = get_rep_skill()
     EFFI = get_eff_skill()
     ORES = get_ore_skill()
@@ -279,7 +320,7 @@ if DOCK == True:
     RIGS = 0
     SECU = 0.0
     STCT = 0.0
-    print("Station selecteed, ignoring structure calculation...")
+    print("Station selecteed, ignoring structure calculation...\n")
 else:
     RIGS = get_rig_type()
     SECU = get_sec_type(RIGS)
@@ -324,7 +365,7 @@ def calc_stn_repo_yield():
     """Calculates station yield."""
 
     stn_yield = (
-        50
+        STEF
         * (1 + (0.03 * REPR))
         * (1 + (0.03 * EFFI))
         * (1 + (0.02 * ORES))
@@ -335,20 +376,26 @@ def calc_stn_repo_yield():
     return stn_yield
 
 
-# prints out yield depending on conditions met.
-if SECU == 0.0 and DOCK == False:
-    norm_unrig_yield = calc_repro_unrig_yield()
-    yield_unrig_round = round(norm_unrig_yield, 2)
-    print("\nApproximate Yield:", yield_unrig_round, "%, (Unrigged)")
+if DOCK == False and SECU == 0.0:
+    struct_unrig_yield = calc_repro_unrig_yield()
+    struct_unrig_yield_round = round(struct_unrig_yield, 2)
+    print("Approximate yield:", struct_unrig_yield_round, "% (unrigged structure")
 elif DOCK == False:
-    norm_yield = calc_repro_yield()
-    yield_round = round(norm_yield, 1)
-    print("\nApproximate Yield:", yield_round, "%, (structure)")
-elif STDS == 0.95:
-    norm_stn_yield = calc_stn_repo_yield()
-    stn_yield_round = round(norm_stn_yield, 2)
-    print("\nApproximate Yield:", stn_yield_round, "% (station, neutral)")
+    struct_yield = calc_repro_yield()
+    struct_yield_round = round(struct_yield, 2)
+    print("Approximate yield:", struct_yield_round, "% (structure)")
+elif DOCK == True and STDS == 0.95:
+    statn_yield = calc_stn_repo_yield()
+    statn_yield_round = round(statn_yield, 2)
+    print("Approximate yield:", statn_yield_round, "% (neutral station)")
+elif DOCK == True and STEF == 25:
+    statn_yield = calc_stn_repo_yield()
+    statn_yield_round = round(statn_yield, 2)
+    print("Approximate yield:", statn_yield_round, "% (low-yield station)")
 else:
-    norm_stn_yield = calc_stn_repo_yield()
-    stn_yield_round = round(norm_stn_yield, 2)
-    print("\nApproximate Yield:", stn_yield_round, "% (station)")
+    statn_yield = calc_stn_repo_yield()
+    statn_yield_round = round(statn_yield, 2)
+    print("Approximate yield:", statn_yield_round, "% (station)")
+
+
+input()
