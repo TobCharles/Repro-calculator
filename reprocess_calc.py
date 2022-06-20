@@ -237,7 +237,7 @@ def get_rep_and_eff_skill() -> int:
                 while eff_skill not in range(0, 6):
                     print("Invalid, please pick options 1-5 or 0:")
                     eff_skill = int(input("Efficiency skill:"))
-                if eff_skill == 0:
+                if eff_skill in range(1, 6):
                     rep_mod = 4
                     print("Reprocessing IV is prereq of Efficiency, adjusting...\n")
 
