@@ -1,7 +1,3 @@
-if __name__ == "__main__":
-    print("=============== REPROCESSING CALCULATOR ===============\n")
-
-
 # Returns the type of station where reprocessing will happen,
 # and whether user has positive standings with station owners.
 def get_dock_type() -> bool:
@@ -443,6 +439,8 @@ print(
     EFFI,
     "\nReprocessing Skill option:",
     REPR,
+    "\nOre Type option:",
+    OTPE,
     "\nSpecific Skill option:",
     ORES,
     "\nImplant option:",
@@ -450,11 +448,14 @@ print(
 )
 
 
+if __name__ == "__main__":
+    print("=============== REPROCESSING CALCULATOR ===============\n")
+
+
 # selects what yield to display
 if EFFI or REPR not in [5]:
     if DOCK is False and SECU == 0.0:
-        struct_unrig_yield = calc_repro_unrig_yield()
-        struct_unrig_yield_round = round(struct_unrig_yield, 2)
+        struct_unrig_yield_round = round(calc_repro_unrig_yield(), 2)
         print(
             "\nApproximate yield:",
             struct_unrig_yield_round,
@@ -463,8 +464,7 @@ if EFFI or REPR not in [5]:
             "Yield calculation may be inaccurate otherwise.",
         )
     elif DOCK is False:
-        struct_yield = calc_repro_yield()
-        struct_yield_round = round(struct_yield, 2)
+        struct_yield_round = round(calc_repro_yield(), 2)
         print(
             "\nApproximate yield:",
             struct_yield_round,
@@ -472,9 +472,8 @@ if EFFI or REPR not in [5]:
             "NOTE: Confirm skill prereqs for specific ores are met.\n"
             "Yield calculation may be inaccurate otherwise.",
         )
-    elif DOCK is True and STDS == 0.95:
-        statn_yield = calc_stn_repo_yield()
-        statn_yield_round = round(statn_yield, 2)
+    elif STDS == 0.95:
+        statn_yield_round = round(calc_stn_repo_yield(), 2)
         print(
             "\nApproximate yield:",
             statn_yield_round,
@@ -482,9 +481,8 @@ if EFFI or REPR not in [5]:
             "NOTE: Confirm skill prereqs for specific ores are met.\n"
             "Yield calculation may be inaccurate otherwise.",
         )
-    elif DOCK is True and STEF in [25, 30, 32]:
-        statn_yield = calc_stn_repo_yield()
-        statn_yield_round = round(statn_yield, 2)
+    elif STEF in [25, 30, 32]:
+        statn_yield_round = round(calc_stn_repo_yield(), 2)
         print(
             "\nApproximate yield:",
             statn_yield_round,
@@ -493,8 +491,7 @@ if EFFI or REPR not in [5]:
             "Yield calculation may be inaccurate otherwise.",
         )
     else:
-        statn_yield = calc_stn_repo_yield()
-        statn_yield_round = round(statn_yield, 2)
+        statn_yield_round = round(calc_stn_repo_yield(), 2)
         print(
             "\nApproximate yield:",
             statn_yield_round,
@@ -504,24 +501,19 @@ if EFFI or REPR not in [5]:
         )
 else:
     if DOCK is False and SECU == 0.0:
-        struct_unrig_yield = calc_repro_unrig_yield()
-        struct_unrig_yield_round = round(struct_unrig_yield, 2)
+        struct_unrig_yield_round = round(calc_repro_unrig_yield(), 2)
         print("\nApprox. yield:", struct_unrig_yield_round, "% (unrigged structure)")
     elif DOCK is False:
-        struct_yield = calc_repro_yield()
-        struct_yield_round = round(struct_yield, 2)
+        struct_yield_round = round(calc_repro_yield(), 2)
         print("\nApprox. yield:", struct_yield_round, "% (structure)")
-    elif DOCK is True and STDS == 0.95:
-        statn_yield = calc_stn_repo_yield()
-        statn_yield_round = round(statn_yield, 2)
+    elif STDS == 0.95:
+        statn_yield_round = round(calc_stn_repo_yield(), 2)
         print("\nApprox. yield:", statn_yield_round, "% (neutral station)")
-    elif DOCK is True and STEF in [25, 30, 32]:
-        statn_yield = calc_stn_repo_yield()
-        statn_yield_round = round(statn_yield, 2)
+    elif STEF in [25, 30, 32]:
+        statn_yield_round = round(calc_stn_repo_yield(), 2)
         print("\nApprox. yield:", statn_yield_round, "% (low-yield station)")
     else:
-        statn_yield = calc_stn_repo_yield()
-        statn_yield_round = round(statn_yield, 2)
+        statn_yield_round = round(calc_stn_repo_yield(), 2)
         print("\nApprox. yield:", statn_yield_round, "% (station)")
 
 
