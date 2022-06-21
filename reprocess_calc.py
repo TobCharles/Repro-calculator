@@ -1,10 +1,9 @@
 if __name__ == "__main__":
     print("=============== REPROCESSING CALCULATOR ===============\n")
 
+
 # Returns the type of station where reprocessing will happen,
 # and whether user has positive standings with station owners.
-
-
 def get_dock_type() -> bool:
     """Function to get type of docking."""
 
@@ -36,7 +35,7 @@ def get_stds_level() -> float:
     """Function to get standings level."""
 
     print(
-        """Do you have positive standings with NPC station?
+        """Do you have positive standings with NPC station?\n
         1. Yes
         2. No
         0. Unsure (calculation assumes no)
@@ -197,13 +196,13 @@ def get_rep_and_eff_skill() -> int:
     """Function to get reprocessing and efficiency skill level."""
 
     print(
-        """Select reprocessing skill level:
+        """Select reprocessing skill level:\n
     1. Reprocessing I
     2. Reprocessing II
     3. Reprocessing III
     4. Reprocessing IV
     5. Reprocessing V
-    0. No Reprocessing skill
+    0. No Reprocessing skill\n
     """
     )
     while True:
@@ -219,13 +218,13 @@ def get_rep_and_eff_skill() -> int:
             rep_mod = rep_skill
 
             print(
-                """Select reprocessing efficiency skill level:
-            1. Reprocessing Efficiency I
-            2. Reprocessing Efficiency II
-            3. Reprocessing Efficiency III
-            4. Reprocessing Efficiency IV
-            5. Reprocessing Efficiency V
-            0. No Reprocessing Efficiency skill
+                """Select reprocessing efficiency skill level:\n
+    1. Reprocessing Efficiency I
+    2. Reprocessing Efficiency II
+    3. Reprocessing Efficiency III
+    4. Reprocessing Efficiency IV
+    5. Reprocessing Efficiency V
+    0. No Reprocessing Efficiency skill
             """
             )
             while True:
@@ -252,13 +251,19 @@ def get_ore_skill() -> int:
     """Function to get specific ore skill level."""
 
     print(
-        """Select specific ore skill level:\n(i.e. Simple/Varigated/Coherent Ore Reprocessing etc)
+        """Select specific ore skill level:\n(i.e. Simple/Varigated/Coherent Ore Reprocessing etc)\n
     1. <Ore> Reprocessing I
     2. <Ore> Reprocessing II
     3. <Ore> Reprocessing III
     4. <Ore> Reprocessing IV
     5. <Ore> Reprocessing V
-    0. No <Ore> Reprocessing skill
+    0. No <Ore> Reprocessing skill\n
+    INFO: Skill prereqs:
+    Simple Ores: Reprocessing IV
+    Coherent Ores: Reprocessing V
+    Variegated Ores: Efficiency IV + Reprocessing V
+    Mercoxit, Abyssal, Complex Ores & all ice & moon Ores: Efficiency V + Reprocessing V\n
+    *** Calculation DOES NOT check if you meet specific ore prereqs! ***
     """
     )
     while True:
@@ -280,7 +285,7 @@ def get_impl_type() -> float:
     """Function to get implant type."""
 
     print(
-        """Select Implants:
+        """Select Implants:\n
     1. RX-801 Implant
     2. RX-802 Implant
     3. RX-804 Implant
@@ -310,7 +315,7 @@ def get_impl_type() -> float:
 
 # determines whether to calculate station or structure yield.
 DOCK = get_dock_type()
-if DOCK == True:
+if DOCK is True:
     STDS = get_stds_level()
     STEF = get_stef_level()
     EFFI, REPR = get_rep_and_eff_skill()
@@ -377,6 +382,7 @@ def calc_stn_repo_yield():
     return statn_calc
 
 
+# prints out options selected
 print(
     "=== Your Selected Options ===\n",
     "Dockup option:",
@@ -399,26 +405,80 @@ print(
     IMPL,
 )
 
-if DOCK == False and SECU == 0.0:
-    struct_unrig_yield = calc_repro_unrig_yield()
-    struct_unrig_yield_round = round(struct_unrig_yield, 2)
-    print("\nApproximate yield:", struct_unrig_yield_round, "% (unrigged structure)")
-elif DOCK == False:
-    struct_yield = calc_repro_yield()
-    struct_yield_round = round(struct_yield, 2)
-    print("\nApproximate yield:", struct_yield_round, "% (structure)")
-elif DOCK == True and STDS == 0.95:
-    statn_yield = calc_stn_repo_yield()
-    statn_yield_round = round(statn_yield, 2)
-    print("\nApproximate yield:", statn_yield_round, "% (neutral station)")
-elif DOCK == True and STEF == 25:
-    statn_yield = calc_stn_repo_yield()
-    statn_yield_round = round(statn_yield, 2)
-    print("\nApproximate yield:", statn_yield_round, "% (low-yield station)")
+
+# selects what yield to display
+if EFFI or REPR not in [5]:
+    if DOCK is False and SECU == 0.0:
+        struct_unrig_yield = calc_repro_unrig_yield()
+        struct_unrig_yield_round = round(struct_unrig_yield, 2)
+        print(
+            "\nApproximate yield:",
+            struct_unrig_yield_round,
+            "% (unrigged structure)\n"
+            "NOTE: Confirm skill prereqs for specific ores are met.\n"
+            "Yield calculation may be inaccurate otherwise.",
+        )
+    elif DOCK is False:
+        struct_yield = calc_repro_yield()
+        struct_yield_round = round(struct_yield, 2)
+        print(
+            "\nApproximate yield:",
+            struct_yield_round,
+            "% (structure)\n"
+            "NOTE: Confirm skill prereqs for specific ores are met.\n"
+            "Yield calculation may be inaccurate otherwise.",
+        )
+    elif DOCK is True and STDS == 0.95:
+        statn_yield = calc_stn_repo_yield()
+        statn_yield_round = round(statn_yield, 2)
+        print(
+            "\nApproximate yield:",
+            statn_yield_round,
+            "% (neutral station)\n"
+            "NOTE: Confirm skill prereqs for specific ores are met.\n"
+            "Yield calculation may be inaccurate otherwise.",
+        )
+    elif DOCK is True and STEF in [25, 30, 32]:
+        statn_yield = calc_stn_repo_yield()
+        statn_yield_round = round(statn_yield, 2)
+        print(
+            "\nApproximate yield:",
+            statn_yield_round,
+            "% (low-yield station)\n"
+            "NOTE: Confirm skill prereqs for specific ores are met.\n"
+            "Yield calculation may be inaccurate otherwise.",
+        )
+    else:
+        statn_yield = calc_stn_repo_yield()
+        statn_yield_round = round(statn_yield, 2)
+        print(
+            "\nApproximate yield:",
+            statn_yield_round,
+            "% (station)\n"
+            "NOTE: Confirm skill prereqs for specific ores are met.\n"
+            "Yield calculation may be inaccurate otherwise.",
+        )
 else:
-    statn_yield = calc_stn_repo_yield()
-    statn_yield_round = round(statn_yield, 2)
-    print("\nApproximate yield:", statn_yield_round, "% (station)")
+    if DOCK is False and SECU == 0.0:
+        struct_unrig_yield = calc_repro_unrig_yield()
+        struct_unrig_yield_round = round(struct_unrig_yield, 2)
+        print("\nApprox. yield:", struct_unrig_yield_round, "% (unrigged structure)")
+    elif DOCK is False:
+        struct_yield = calc_repro_yield()
+        struct_yield_round = round(struct_yield, 2)
+        print("\nApprox. yield:", struct_yield_round, "% (structure)")
+    elif DOCK is True and STDS == 0.95:
+        statn_yield = calc_stn_repo_yield()
+        statn_yield_round = round(statn_yield, 2)
+        print("\nApprox. yield:", statn_yield_round, "% (neutral station)")
+    elif DOCK is True and STEF in [25, 30, 32]:
+        statn_yield = calc_stn_repo_yield()
+        statn_yield_round = round(statn_yield, 2)
+        print("\nApprox. yield:", statn_yield_round, "% (low-yield station)")
+    else:
+        statn_yield = calc_stn_repo_yield()
+        statn_yield_round = round(statn_yield, 2)
+        print("\nApprox. yield:", statn_yield_round, "% (station)")
 
 
 input()
