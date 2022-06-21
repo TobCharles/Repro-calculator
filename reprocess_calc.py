@@ -244,26 +244,46 @@ def get_rep_and_eff_skill() -> int:
                 else:
                     eff_mod = eff_skill
 
-                return eff_mod, rep_mod
+                return rep_mod, eff_mod
+
+
+def get_ore_type() -> int:
+
+    print(
+        """Select specific ore type:
+        1. Simple Ores
+        2. Coherent Ores
+        3. Variegated Ores
+        4. Abyssal, Complex, Mercoxit Ores, Ice & Moon Ores
+        0. Not Applicable"""
+    )
+
+    while True:
+        try:
+            ore_type = int(input("Ore type:"))
+        except ValueError:
+            print("Invalid, input must be integer:")
+            continue
+        while ore_type not in range(0, 5):
+            print("Invalid, please pick options 1-4 or 0:")
+            ore_type = int(input("Ore type:"))
+        else:
+            type_mod = ore_type
+
+            return type_mod
 
 
 def get_ore_skill() -> int:
     """Function to get specific ore skill level."""
 
     print(
-        """Select specific ore skill level:\n(i.e. Simple/Varigated/Coherent Ore Reprocessing etc)\n
+        """Select specific ore skill level:
     1. <Ore> Reprocessing I
     2. <Ore> Reprocessing II
     3. <Ore> Reprocessing III
     4. <Ore> Reprocessing IV
     5. <Ore> Reprocessing V
     0. No <Ore> Reprocessing skill\n
-    INFO: Skill prereqs:
-    Simple Ores: Reprocessing IV
-    Coherent Ores: Reprocessing V
-    Variegated Ores: Efficiency IV + Reprocessing V
-    Mercoxit, Abyssal, Complex Ores & all ice & moon Ores: Efficiency V + Reprocessing V\n
-    *** Calculation DOES NOT check if you meet specific ore prereqs! ***
     """
     )
     while True:
@@ -318,7 +338,19 @@ DOCK = get_dock_type()
 if DOCK is True:
     STDS = get_stds_level()
     STEF = get_stef_level()
-    EFFI, REPR = get_rep_and_eff_skill()
+    OTPE = get_ore_type()
+    if OTPE == 1:
+        REPR = int(4)
+    elif OTPE == 2:
+        REPR = 5
+    elif OTPE == 3:
+        REPR = 5
+        EFFI = int(4)
+    elif OTPE == 4:
+        REPR = 5
+        EFFI = 5
+    else:
+        REPR, EFFI = get_rep_and_eff_skill()
     ORES = get_ore_skill()
     IMPL = get_impl_type()
     RIGS = int(0)
@@ -329,7 +361,19 @@ else:
     RIGS = get_rig_type()
     SECU = get_sec_type(RIGS)
     STCT = get_strc_type()
-    EFFI, REPR = get_rep_and_eff_skill()
+    OTPE = get_ore_type()
+    if OTPE == 1:
+        REPR = int(4)
+    elif OTPE == 2:
+        REPR = 5
+    elif OTPE == 3:
+        REPR = 5
+        EFFI = int(4)
+    elif OTPE == 4:
+        REPR = 5
+        EFFI = 5
+    else:
+        REPR, EFFI = get_rep_and_eff_skill()
     ORES = get_ore_skill()
     IMPL = get_impl_type()
     STDS = 0.0
