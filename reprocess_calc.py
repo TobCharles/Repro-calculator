@@ -1,5 +1,34 @@
 # Returns the type of station where reprocessing will happen,
 # and whether user has positive standings with station owners.
+
+
+def get_repro_type() -> bool:
+    """Function to get type of reprocessing."""
+
+    print(
+        """Select type of reprocessing:\n
+        1. Ores
+        2. Modules, Ships (scrapmetal)
+        """
+    )
+
+    while True:
+        try:
+            repro_type = int(input("Reprocess type:"))
+        except ValueError:
+            print("Invalid, input must be integer:")
+            continue
+        while repro_type not in range(1, 3):
+            print("Invalid, please pick options 1 or 2:")
+            repro_type = int(input("Reprocessing type:"))
+        if repro_type == 1:
+            rtype_mod = True
+        else:
+            rtype_mod = False
+
+        return rtype_mod
+
+
 def get_dock_type() -> bool:
     """Function to get type of docking."""
 
@@ -297,6 +326,35 @@ def get_ore_skill() -> int:
         return ore_mod
 
 
+def get_scrap_skill() -> int:
+    """Function to get scrapmetal reprocessing skill level."""
+
+    print(
+        """Select scrapmetal reprocessing skill level:
+        1. Scrapmetal Reprocessing I
+        2. Scrapmetal Reprocessing II
+        3. Scrapmetal Reprocessing III
+        4. Scrapmetal Reprocessing IV
+        5. Scrapmetal Reprocessing V
+        0. No Scrapmetal Reprocessing Skill
+        """
+    )
+
+    while True:
+        try:
+            scrap_skill = int(input("Scrap skill:"))
+        except ValueError:
+            print("Invalid, input must be integer:")
+            continue
+        while scrap_skill not in range(0, 6):
+            print("Invalid, pick options 1-5 or 0:")
+            scrap_skill = int(input("Scrap skill:"))
+        else:
+            scrap_mod = scrap_skill
+
+        return scrap_mod
+
+
 def get_impl_type() -> float:
     """Function to get implant type."""
 
@@ -330,50 +388,68 @@ def get_impl_type() -> float:
 
 
 # determines whether to calculate station or structure yield.
-DOCK = get_dock_type()
-if DOCK is True:
-    STDS = get_stds_level()
-    STEF = get_stef_level()
-    OTPE = get_ore_type()
-    if OTPE == 1:
-        REPR = int(4)
-    elif OTPE == 2:
-        REPR = 5
-    elif OTPE == 3:
-        REPR = 5
-        EFFI = int(4)
-    elif OTPE == 4:
-        REPR = 5
-        EFFI = 5
+RTPE = get_repro_type()
+if RTPE is True:
+    DOCK = get_dock_type()
+    if DOCK is True:
+        STDS = get_stds_level()
+        STEF = get_stef_level()
+        OTPE = get_ore_type()
+        if OTPE == 1:
+            REPR = int(4)
+        elif OTPE == 2:
+            REPR = 5
+        elif OTPE == 3:
+            REPR = 5
+            EFFI = int(4)
+        elif OTPE == 4:
+            REPR = 5
+            EFFI = 5
+        else:
+            REPR, EFFI = get_rep_and_eff_skill()
+            ORES = get_ore_skill()
+            IMPL = get_impl_type()
+            RIGS = int(0)
+            SECU, STCT = (0.0, 0.0)
+            print(
+                "\nStation selecteed, ignoring structure calculation..."
+                "Reprocessing type: ores, adjusting calculations...\n"
+            )
     else:
-        REPR, EFFI = get_rep_and_eff_skill()
-    ORES = get_ore_skill()
-    IMPL = get_impl_type()
-    RIGS = int(0)
-    SECU = 0.0
-    STCT = 0.0
-    print("\nStation selecteed, ignoring structure calculation...\n")
+        RIGS = get_rig_type()
+        SECU = get_sec_type(RIGS)
+        STCT = get_strc_type()
+        OTPE = get_ore_type()
+        if OTPE == 1:
+            REPR = int(4)
+        elif OTPE == 2:
+            REPR = 5
+        elif OTPE == 3:
+            REPR = 5
+            EFFI = int(4)
+        elif OTPE == 4:
+            REPR = 5
+            EFFI = 5
+        else:
+            REPR, EFFI = get_rep_and_eff_skill()
+        ORES = get_ore_skill()
+        IMPL = get_impl_type()
+        STDS, STEF = (0.0, 0.0)
 else:
-    RIGS = get_rig_type()
-    SECU = get_sec_type(RIGS)
-    STCT = get_strc_type()
-    OTPE = get_ore_type()
-    if OTPE == 1:
-        REPR = int(4)
-    elif OTPE == 2:
-        REPR = 5
-    elif OTPE == 3:
-        REPR = 5
-        EFFI = int(4)
-    elif OTPE == 4:
-        REPR = 5
-        EFFI = 5
+    DOCK = get_dock_type()
+    if DOCK is True:
+        STDS = get_stds_level()
+        STEF = get_stef_level()
+        SCRP = get_scrap_skill()
+        IMPL = get_impl_type()
+        REPR, EFFI, OTPE, ORES, RIGS, SECU, STCT = int(0, 0, 0, 0, 0, 0, 0)
     else:
-        REPR, EFFI = get_rep_and_eff_skill()
-    ORES = get_ore_skill()
-    IMPL = get_impl_type()
-    STDS = 0.0
-    STEF = int(0)
+        RIGS = get_rig_type()
+        SECU = get_sec_type(RIGS)
+        STCT = get_strc_type()
+        SCRP = get_scrap_skill()
+        IMPL = get_impl_type()
+        REPR, EFFI, OTPE, ORES = int(0, 0, 0, 0)
 
 
 # calculation formulae
@@ -422,10 +498,38 @@ def calc_stn_repo_yield():
     return statn_calc
 
 
+def calc_scrap_strc_yield():
+    """Calculates scrapmetal yield in structures."""
+
+    scrap_strc_calc = (
+        ((50 + RIGS) * (1 + SECU)) * (1 + STCT) * (1 + (0.02 * SCRP)) * (1 + IMPL)
+    )
+
+    return scrap_strc_calc
+
+
+def calc_scrap_strc_unrig_yield():
+    """Calculates scrapmetal yield in unrigged structures."""
+
+    scrap_strc_unrig_calc = (50 + RIGS) * (1 + STCT) * (1 + (0.02 * SCRP)) * (1 + IMPL)
+
+    return scrap_strc_unrig_calc
+
+
+def calc_scrap_statn_yield():
+    """Calculates scrapmetal yield in station."""
+
+    scrap_statn_unrig_calc = STEF * (1 + (0.02 * SCRP)) * (1 + IMPL) * STDS
+
+    return scrap_statn_unrig_calc
+
+
 # prints out options selected
 print(
     "=== Your Selected Options ===\n",
-    "Dockup option:",
+    "Reprocessing type:",
+    RTPE,
+    "\nDockup option:",
     DOCK,
     "\nStanding option:",
     STDS,
@@ -443,6 +547,8 @@ print(
     OTPE,
     "\nSpecific Skill option:",
     ORES,
+    "\nScrapmetal Skill option:",
+    SCRP,
     "\nImplant option:",
     IMPL,
 )
@@ -453,68 +559,91 @@ if __name__ == "__main__":
 
 
 # selects what yield to display
-if EFFI or REPR not in [5]:
+if RTPE is True:
     if DOCK is False and SECU == 0.0:
-        struct_unrig_yield_round = round(calc_repro_unrig_yield(), 2)
+        scrap_unrig_round = round(calc_scrap_strc_unrig_yield(), 2)
+        print(
+            "\nApprox yield:",
+            scrap_unrig_round,
+            "% (scrap / unrigged structure)\n",
+        )
+    elif DOCK is False:
+        scrap_struct_round = round(calc_scrap_strc_yield(), 2)
+        print("\nApprox yield:", scrap_struct_round, "% (structure)\n")
+    elif STDS == 0.95:
+        scrap_statn_round = round(calc_scrap_statn_yield(), 2)
+        print("\nApprox yield:", scrap_statn_round, "% (neutral station)\n")
+    elif STEF in [25, 30, 32]:
+        scrap_statn_round = round(calc_scrap_statn_yield(), 2)
+        print("\nApprox yield:", scrap_statn_round, "% (low-yield station)\n")
+    else:
+        scrap_statn_round = round(calc_scrap_statn_yield(), 2)
+        print("\nApprox yield:", scrap_statn_round, "% (station)\n")
+elif EFFI or REPR not in [5]:
+    if DOCK is False and SECU == 0.0:
+        strct_unrig_round = round(calc_repro_unrig_yield(), 2)
         print(
             "\nApproximate yield:",
-            struct_unrig_yield_round,
-            "% (unrigged structure)\n"
+            strct_unrig_round,
+            "% (scrapmetal / unrigged structure)\n"
             "NOTE: Confirm skill prereqs for specific ores are met.\n"
             "Yield calculation may be inaccurate otherwise.",
         )
     elif DOCK is False:
-        struct_yield_round = round(calc_repro_yield(), 2)
+        struct_round = round(calc_repro_yield(), 2)
         print(
             "\nApproximate yield:",
-            struct_yield_round,
+            struct_round,
             "% (structure)\n"
             "NOTE: Confirm skill prereqs for specific ores are met.\n"
             "Yield calculation may be inaccurate otherwise.",
         )
     elif STDS == 0.95:
-        statn_yield_round = round(calc_stn_repo_yield(), 2)
+        statn_round = round(calc_stn_repo_yield(), 2)
         print(
             "\nApproximate yield:",
-            statn_yield_round,
+            statn_round,
             "% (neutral station)\n"
             "NOTE: Confirm skill prereqs for specific ores are met.\n"
             "Yield calculation may be inaccurate otherwise.",
         )
     elif STEF in [25, 30, 32]:
-        statn_yield_round = round(calc_stn_repo_yield(), 2)
+        statn_round = round(calc_stn_repo_yield(), 2)
         print(
             "\nApproximate yield:",
-            statn_yield_round,
+            statn_round,
             "% (low-yield station)\n"
             "NOTE: Confirm skill prereqs for specific ores are met.\n"
             "Yield calculation may be inaccurate otherwise.",
         )
     else:
-        statn_yield_round = round(calc_stn_repo_yield(), 2)
+        statn_round = round(calc_stn_repo_yield(), 2)
         print(
             "\nApproximate yield:",
-            statn_yield_round,
+            statn_round,
             "% (station)\n"
             "NOTE: Confirm skill prereqs for specific ores are met.\n"
             "Yield calculation may be inaccurate otherwise.",
         )
 else:
     if DOCK is False and SECU == 0.0:
-        struct_unrig_yield_round = round(calc_repro_unrig_yield(), 2)
-        print("\nApprox. yield:", struct_unrig_yield_round, "% (unrigged structure)")
+        strct_unrig_round = round(calc_repro_unrig_yield(), 2)
+        print(
+            "\nApproximate yield:",
+            strct_unrig_round,
+            "% (scrapmetal / unrigged structure)\n",
+        )
     elif DOCK is False:
-        struct_yield_round = round(calc_repro_yield(), 2)
-        print("\nApprox. yield:", struct_yield_round, "% (structure)")
+        struct_round = round(calc_repro_yield(), 2)
+        print("\nApproximate yield:", struct_round, "% (structure)\n")
     elif STDS == 0.95:
-        statn_yield_round = round(calc_stn_repo_yield(), 2)
-        print("\nApprox. yield:", statn_yield_round, "% (neutral station)")
+        statn_round = round(calc_stn_repo_yield(), 2)
+        print("\nApproximate yield:", statn_round, "% (neutral station)\n")
     elif STEF in [25, 30, 32]:
-        statn_yield_round = round(calc_stn_repo_yield(), 2)
-        print("\nApprox. yield:", statn_yield_round, "% (low-yield station)")
+        statn_round = round(calc_stn_repo_yield(), 2)
+        print("\nApproximate yield:", statn_round, "% (low-yield station)\n")
     else:
-        statn_yield_round = round(calc_stn_repo_yield(), 2)
-        print("\nApprox. yield:", statn_yield_round, "% (station)")
-
+        statn_round = round(calc_stn_repo_yield(), 2)
+        print("\nApproximate yield:", statn_round, "% (station)\n")
 
 input()
