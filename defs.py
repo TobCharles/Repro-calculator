@@ -14,15 +14,17 @@ def get_repro_type() -> bool:
         except ValueError:
             print("Invalid, input must be integer:")
             continue
-        while repro_type not in range(1, 3):
-            print("Invalid, please pick options 1 or 2:")
-            repro_type = int(input("Reprocessing type:"))
-        if repro_type == 1:
-            rtype_mod = True
         else:
-            rtype_mod = False
+            break
+    while repro_type not in range(1, 3):
+        print("Invalid, please pick options 1 or 2:")
+        repro_type = int(input("Reprocessing type:"))
+    if repro_type == 1:
+        rtype_mod = True
+    else:
+        rtype_mod = False
 
-        return rtype_mod
+    return rtype_mod
 
 
 def get_dock_type() -> bool:
@@ -41,15 +43,17 @@ def get_dock_type() -> bool:
         except ValueError:
             print("Invalid, input must be integer:")
             continue
-        while dock_type not in range(1, 3):
-            print("Invalid, please pick options 1 or 2:")
-            dock_type = int(input("Dockup option:"))
-        if dock_type == 1:
-            dock_mod = True
         else:
-            dock_mod = False
+            break
+    while dock_type not in range(1, 3):
+        print("Invalid, please pick options 1 or 2:")
+        dock_type = int(input("Dockup option:"))
+    if dock_type == 1:
+        dock_mod = True
+    else:
+        dock_mod = False
 
-        return dock_mod
+    return dock_mod
 
 
 def get_stds_level() -> float:
@@ -69,15 +73,17 @@ def get_stds_level() -> float:
         except ValueError:
             print("Invalid, input must be integer.")
             continue
-        while stds_type not in range(0, 3):
-            print("Invalid, please pick options 1, 2 or 0:")
-            stds_type = int(input("Option:"))
-        if stds_type == 1:
-            stds_mod = 1.0
         else:
-            stds_mod = 0.95
+            break
+    while stds_type not in range(0, 3):
+        print("Invalid, please pick options 1, 2 or 0:")
+        stds_type = int(input("Option:"))
+    if stds_type == 1:
+        stds_mod = 1.0
+    else:
+        stds_mod = 0.95
 
-        return stds_mod
+    return stds_mod
 
 
 def get_stef_level() -> int:
@@ -99,23 +105,25 @@ def get_stef_level() -> int:
         except ValueError:
             print("Invalid, input must be integer:")
             continue
-        while stef_type not in range(0, 7):
-            print("Invalid, pick options 1-6 or 0:")
-            stef_type = int(input("Station efficiency:"))
-        if stef_type == 1:
-            stef_mod = 25
-        elif stef_type == 2:
-            stef_mod = 30
-        elif stef_type == 4:
-            stef_mod = 40
-        elif stef_type == 5:
-            stef_mod = 45
-        elif stef_type == 6:
-            stef_mod = 50
         else:
-            stef_mod = 32
+            break
+    while stef_type not in range(0, 7):
+        print("Invalid, pick options 1-6 or 0:")
+        stef_type = int(input("Station efficiency:"))
+    if stef_type == 1:
+        stef_mod = 25
+    elif stef_type == 2:
+        stef_mod = 30
+    elif stef_type == 4:
+        stef_mod = 40
+    elif stef_type == 5:
+        stef_mod = 45
+    elif stef_type == 6:
+        stef_mod = 50
+    else:
+        stef_mod = 32
 
-        return stef_mod
+    return stef_mod
 
 
 def get_rig_type() -> int:
@@ -135,17 +143,19 @@ def get_rig_type() -> int:
         except ValueError:
             print("Invalid, input must be integer:")
             continue
-        while rig_type not in [1, 2, 9, 0]:
-            print("Invalid, pick options 1, 2, 9 or 0:")
-            rig_type = int(input("Rig type:"))
-        if rig_type == 1:
-            rig_mod = 1
-        elif rig_type == 2:
-            rig_mod = 3
         else:
-            rig_mod = 0
+            break
+    while rig_type not in [1, 2, 9, 0]:
+        print("Invalid, pick options 1, 2, 9 or 0:")
+        rig_type = int(input("Rig type:"))
+    if rig_type == 1:
+        rig_mod = 1
+    elif rig_type == 2:
+        rig_mod = 3
+    else:
+        rig_mod = 0
 
-        return rig_mod
+    return rig_mod
 
 
 def get_sec_type(rig_val: int) -> float:
@@ -170,17 +180,19 @@ def get_sec_type(rig_val: int) -> float:
         except ValueError:
             print("Invalid, input must be integer:")
             continue
-        while sec_type not in range(0, 4):
-            print("Invalid, please pick options 1-3:")
-            sec_type = int(input("Security level:"))
-        if sec_type == 2:
-            sec_mod = 0.06
-        elif sec_type == 3:
-            sec_mod = 0.12
         else:
-            sec_mod = 0.0
+            break
+    while sec_type not in range(0, 4):
+        print("Invalid, please pick options 1-3:")
+        sec_type = int(input("Security level:"))
+    if sec_type == 2:
+        sec_mod = 0.06
+    elif sec_type == 3:
+        sec_mod = 0.12
+    else:
+        sec_mod = 0.0
 
-        return sec_mod
+    return sec_mod
 
 
 def get_strc_type() -> float:
@@ -199,17 +211,19 @@ def get_strc_type() -> float:
         except ValueError:
             print("Invalid, input must be integer:")
             continue
-        while strc_type not in [1, 2, 9]:
-            print("Invalid, please pick options 1,2 or 9:")
-            strc_type = int(input("Structure type:"))
-        if strc_type == 1:
-            strc_mod = 0.02
-        elif strc_type == 2:
-            strc_mod = 0.055
         else:
-            strc_mod = 0.0
+            break
+    while strc_type not in [1, 2, 9]:
+        print("Invalid, please pick options 1,2 or 9:")
+        strc_type = int(input("Structure type:"))
+    if strc_type == 1:
+        strc_mod = 0.02
+    elif strc_type == 2:
+        strc_mod = 0.055
+    else:
+        strc_mod = 0.0
 
-        return strc_mod
+    return strc_mod
 
 
 def get_rep_and_eff_skill() -> int:
@@ -231,13 +245,15 @@ def get_rep_and_eff_skill() -> int:
         except ValueError:
             print("Invalid, input must be integer:")
             continue
-        while rep_skill not in range(0, 6):
-            print("Invalid, please pick options 1-5 or 0:")
-            rep_skill = int(input("Reprocessing skill:"))
         else:
-            rep_mod = rep_skill
+            break
+    while rep_skill not in range(0, 6):
+        print("Invalid, please pick options 1-5 or 0:")
+        rep_skill = int(input("Reprocessing skill:"))
+    else:
+        rep_mod = rep_skill
 
-            print(
+        print(
                 """Select reprocessing efficiency skill level:\n
     1. Reprocessing Efficiency I
     2. Reprocessing Efficiency II
@@ -247,24 +263,26 @@ def get_rep_and_eff_skill() -> int:
     0. No Reprocessing Efficiency skill
             """
             )
-            while True:
-                try:
-                    eff_skill = int(input("Efficiency skill:"))
-                except ValueError:
-                    print("Invalid, input must be integer:")
-                    continue
-                while eff_skill not in range(0, 6):
-                    print("Invalid, please pick options 1-5 or 0:")
-                    eff_skill = int(input("Efficiency skill:"))
-                if eff_skill in range(1, 6):
-                    rep_mod = 4
-                    print("Reprocessing IV is prereq of Efficiency, adjusting...\n")
+        while True:
+            try:
+                eff_skill = int(input("Efficiency skill:"))
+            except ValueError:
+                print("Invalid, input must be integer:")
+                continue
+            else:
+                break
+        while eff_skill not in range(0, 6):
+            print("Invalid, please pick options 1-5 or 0:")
+            eff_skill = int(input("Efficiency skill:"))
+        if eff_skill in range(1, 6):
+            rep_mod = 4
+            print("Reprocessing IV is prereq of Efficiency, adjusting...\n")
 
-                    eff_mod = eff_skill
-                else:
-                    eff_mod = eff_skill
+            eff_mod = eff_skill
+        else:
+            eff_mod = eff_skill
 
-                return rep_mod, eff_mod
+        return rep_mod, eff_mod
 
 
 def get_ore_type() -> int:
@@ -284,13 +302,15 @@ def get_ore_type() -> int:
         except ValueError:
             print("Invalid, input must be integer:")
             continue
-        while ore_type not in range(0, 5):
-            print("Invalid, please pick options 1-4 or 0:")
-            ore_type = int(input("Ore type:"))
         else:
-            type_mod = ore_type
+            break
+    while ore_type not in range(0, 5):
+        print("Invalid, please pick options 1-4 or 0:")
+        ore_type = int(input("Ore type:"))
+    else:
+        type_mod = ore_type
 
-            return type_mod
+        return type_mod
 
 
 def get_ore_skill() -> int:
@@ -312,13 +332,15 @@ def get_ore_skill() -> int:
         except ValueError:
             print("Invalid, input must be integer:")
             continue
-        while ore_skill not in range(0, 6):
-            print("Invalid, please pick options 1-5 or 0:")
-            ore_skill = int(input("Specific skill:"))
         else:
-            ore_mod = ore_skill
+            break
+    while ore_skill not in range(0, 6):
+        print("Invalid, please pick options 1-5 or 0:")
+        ore_skill = int(input("Specific skill:"))
+    else:
+        ore_mod = ore_skill
 
-        return ore_mod
+    return ore_mod
 
 
 def get_scrap_skill() -> int:
@@ -341,13 +363,15 @@ def get_scrap_skill() -> int:
         except ValueError:
             print("Invalid, input must be integer:")
             continue
-        while scrap_skill not in range(0, 6):
-            print("Invalid, pick options 1-5 or 0:")
-            scrap_skill = int(input("Scrap skill:"))
         else:
-            scrap_mod = scrap_skill
+            break
+    while scrap_skill not in range(0, 6):
+        print("Invalid, pick options 1-5 or 0:")
+        scrap_skill = int(input("Scrap skill:"))
+    else:
+        scrap_mod = scrap_skill
 
-        return scrap_mod
+    return scrap_mod
 
 
 def get_impl_type() -> float:
@@ -367,16 +391,18 @@ def get_impl_type() -> float:
         except ValueError:
             print("Invalid, input must be integer:")
             continue
-        while imp_type not in range(0, 4):
-            print("Invalid, please pick options 1-3 or 0:")
-            imp_type = int(input("Implant type:"))
-        if imp_type == 1:
-            imp_mod = 0.01
-        elif imp_type == 2:
-            imp_mod = 0.02
-        elif imp_type == 3:
-            imp_mod = 0.04
         else:
-            imp_mod = 0.0
+            break
+    while imp_type not in range(0, 4):
+        print("Invalid, please pick options 1-3 or 0:")
+        imp_type = int(input("Implant type:"))
+    if imp_type == 1:
+        imp_mod = 0.01
+    elif imp_type == 2:
+        imp_mod = 0.02
+    elif imp_type == 3:
+        imp_mod = 0.04
+    else:
+        imp_mod = 0.0
 
-        return imp_mod
+    return imp_mod
